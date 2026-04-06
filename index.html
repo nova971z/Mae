@@ -1,0 +1,519 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mae Conciergerie — Services d'exception</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <!-- Cursor custom -->
+  <div class="cursor-dot" id="cursorDot"></div>
+  <div class="cursor-ring" id="cursorRing"></div>
+
+  <!-- Loader -->
+  <div class="loader" id="loader">
+    <div class="loader-inner">
+      <div class="loader-logo">Mae</div>
+      <div class="loader-bar">
+        <div class="loader-bar-fill" id="loaderFill"></div>
+      </div>
+      <p class="loader-text">L'excellence à votre service</p>
+    </div>
+  </div>
+
+  <!-- Navigation -->
+  <nav class="nav" id="nav">
+    <div class="nav-inner">
+      <a href="#hero" class="nav-logo">Mae</a>
+      <div class="nav-links" id="navLinks">
+        <a href="#services" class="nav-link">Services</a>
+        <a href="#about" class="nav-link">À propos</a>
+        <a href="#horaires" class="nav-link">Horaires</a>
+        <a href="#temoignages" class="nav-link">Témoignages</a>
+        <a href="#contact" class="nav-link">Contact</a>
+      </div>
+      <button class="nav-toggle" id="navToggle" aria-label="Menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- Hero Section -->
+  <section class="hero" id="hero">
+    <div class="hero-bg">
+      <div class="hero-particles" id="particles"></div>
+      <div class="hero-gradient"></div>
+    </div>
+    <div class="hero-content">
+      <div class="hero-badge reveal">Conciergerie de prestige</div>
+      <h1 class="hero-title reveal">
+        <span class="hero-title-line">L'art de vous</span>
+        <span class="hero-title-line hero-title-accent">simplifier la vie</span>
+      </h1>
+      <p class="hero-subtitle reveal">
+        Mae Conciergerie vous offre un service sur-mesure d'exception.<br>
+        Du quotidien à l'extraordinaire, nous anticipons chacun de vos besoins.
+      </p>
+      <div class="hero-actions reveal">
+        <a href="#services" class="btn btn-primary">Découvrir nos services</a>
+        <a href="#contact" class="btn btn-outline">Nous contacter</a>
+      </div>
+    </div>
+    <div class="hero-scroll">
+      <div class="hero-scroll-line"></div>
+      <span>Scroll</span>
+    </div>
+  </section>
+
+  <!-- Services Section -->
+  <section class="services" id="services">
+    <div class="container">
+      <div class="section-header reveal">
+        <span class="section-tag">Nos expertises</span>
+        <h2 class="section-title">Des services pensés<br>pour <em>votre confort</em></h2>
+        <p class="section-desc">Chaque détail compte. Nous mettons notre savoir-faire au service de votre tranquillité.</p>
+      </div>
+
+      <div class="services-grid">
+        <!-- Service 1 -->
+        <div class="service-card reveal" data-tilt>
+          <div class="service-icon">
+            <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.5">
+              <path d="M24 4v8M24 36v8M4 24h8M36 24h8M8.93 8.93l5.66 5.66M33.41 33.41l5.66 5.66M8.93 39.07l5.66-5.66M33.41 14.59l5.66-5.66"/>
+              <circle cx="24" cy="24" r="10"/>
+            </svg>
+          </div>
+          <h3 class="service-title">Gestion du quotidien</h3>
+          <p class="service-desc">Courses, pressing, courrier, gestion administrative… Nous prenons en charge les tâches qui occupent votre temps précieux.</p>
+          <ul class="service-list">
+            <li>Courses & approvisionnement</li>
+            <li>Pressing & blanchisserie</li>
+            <li>Gestion du courrier</li>
+            <li>Démarches administratives</li>
+          </ul>
+        </div>
+
+        <!-- Service 2 -->
+        <div class="service-card reveal" data-tilt>
+          <div class="service-icon">
+            <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.5">
+              <path d="M6 24c0-9.94 8.06-18 18-18s18 8.06 18 18"/>
+              <path d="M6 24h6l4-8 6 16 6-12 4 4h10"/>
+            </svg>
+          </div>
+          <h3 class="service-title">Entretien & maintenance</h3>
+          <p class="service-desc">Votre propriété mérite le meilleur. Notre réseau d'artisans qualifiés intervient rapidement et efficacement.</p>
+          <ul class="service-list">
+            <li>Ménage & nettoyage profond</li>
+            <li>Jardinage & espaces verts</li>
+            <li>Petits travaux & réparations</li>
+            <li>Surveillance de propriété</li>
+          </ul>
+        </div>
+
+        <!-- Service 3 -->
+        <div class="service-card reveal" data-tilt>
+          <div class="service-icon">
+            <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.5">
+              <path d="M12 4h24a4 4 0 014 4v32a4 4 0 01-4 4H12a4 4 0 01-4-4V8a4 4 0 014-4z"/>
+              <path d="M16 16h16M16 24h16M16 32h8"/>
+            </svg>
+          </div>
+          <h3 class="service-title">Événementiel</h3>
+          <p class="service-desc">Des réceptions intimistes aux grands événements, nous orchestrons chaque instant pour créer des moments mémorables.</p>
+          <ul class="service-list">
+            <li>Organisation de réceptions</li>
+            <li>Traiteur & chef à domicile</li>
+            <li>Décoration & scénographie</li>
+            <li>Coordination événementielle</li>
+          </ul>
+        </div>
+
+        <!-- Service 4 -->
+        <div class="service-card reveal" data-tilt>
+          <div class="service-icon">
+            <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.5">
+              <circle cx="24" cy="24" r="20"/>
+              <path d="M16 20c0-4.42 3.58-8 8-8s8 3.58 8 8-3.58 8-8 8"/>
+              <path d="M24 28v8M20 36h8"/>
+            </svg>
+          </div>
+          <h3 class="service-title">Voyages & loisirs</h3>
+          <p class="service-desc">Des escapades sur-mesure aux réservations exclusives, nous transformons vos envies en expériences inoubliables.</p>
+          <ul class="service-list">
+            <li>Réservation de voyages</li>
+            <li>Billetterie spectacles & sport</li>
+            <li>Restaurants & clubs privés</li>
+            <li>Activités personnalisées</li>
+          </ul>
+        </div>
+
+        <!-- Service 5 -->
+        <div class="service-card reveal" data-tilt>
+          <div class="service-icon">
+            <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.5">
+              <path d="M24 4L4 18v22a4 4 0 004 4h32a4 4 0 004-4V18L24 4z"/>
+              <path d="M18 44V28h12v16"/>
+            </svg>
+          </div>
+          <h3 class="service-title">Home Management</h3>
+          <p class="service-desc">La gestion complète de votre résidence : de l'accueil des prestataires au suivi des travaux, nous veillons sur votre bien.</p>
+          <ul class="service-list">
+            <li>Gestion locative saisonnière</li>
+            <li>Accueil & remise de clés</li>
+            <li>Suivi de travaux</li>
+            <li>Inventaire & état des lieux</li>
+          </ul>
+        </div>
+
+        <!-- Service 6 -->
+        <div class="service-card reveal" data-tilt>
+          <div class="service-icon">
+            <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.5">
+              <path d="M24 44c11.046 0 20-8.954 20-20S35.046 4 24 4 4 12.954 4 24s8.954 20 20 20z"/>
+              <path d="M24 14v10l7 7"/>
+            </svg>
+          </div>
+          <h3 class="service-title">Assistance 7j/7</h3>
+          <p class="service-desc">Un imprévu ? Une urgence ? Notre équipe est disponible 7 jours sur 7 pour répondre à toutes vos demandes, même les plus inattendues.</p>
+          <ul class="service-list">
+            <li>Ligne dédiée prioritaire</li>
+            <li>Intervention d'urgence</li>
+            <li>Coordination de prestataires</li>
+            <li>Solutions sur-mesure 24/7</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- About / Chiffres Section -->
+  <section class="about" id="about">
+    <div class="about-bg-text" aria-hidden="true">Excellence</div>
+    <div class="container">
+      <div class="about-grid">
+        <div class="about-content reveal">
+          <span class="section-tag">Qui sommes-nous</span>
+          <h2 class="section-title">L'excellence,<br>notre <em>signature</em></h2>
+          <p>Fondée avec la conviction que chacun mérite un service d'exception, Mae Conciergerie s'est imposée comme la référence en matière de conciergerie privée et professionnelle.</p>
+          <p>Notre équipe de concierges expérimentés met tout en œuvre pour anticiper vos besoins et dépasser vos attentes. Discrétion, réactivité et excellence sont les piliers de notre engagement.</p>
+        </div>
+        <div class="about-stats reveal">
+          <div class="stat">
+            <span class="stat-number" data-target="500">0</span>
+            <span class="stat-plus">+</span>
+            <span class="stat-label">Clients satisfaits</span>
+          </div>
+          <div class="stat">
+            <span class="stat-number" data-target="15">0</span>
+            <span class="stat-label">Concierges dédiés</span>
+          </div>
+          <div class="stat">
+            <span class="stat-number" data-target="98">0</span>
+            <span class="stat-percent">%</span>
+            <span class="stat-label">Taux de satisfaction</span>
+          </div>
+          <div class="stat">
+            <span class="stat-number" data-target="3000">0</span>
+            <span class="stat-plus">+</span>
+            <span class="stat-label">Demandes traitées / an</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Horaires Section -->
+  <section class="horaires" id="horaires">
+    <div class="container">
+      <div class="section-header reveal">
+        <span class="section-tag">Disponibilité</span>
+        <h2 class="section-title">Toujours à votre<br><em>disposition</em></h2>
+        <p class="section-desc">Nos horaires sont pensés pour s'adapter à votre rythme de vie.</p>
+      </div>
+
+      <div class="horaires-grid">
+        <div class="horaire-card reveal">
+          <div class="horaire-icon">
+            <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.5">
+              <circle cx="24" cy="24" r="20"/>
+              <path d="M24 12v12l8 4"/>
+            </svg>
+          </div>
+          <h3>Accueil & Bureau</h3>
+          <div class="horaire-rows">
+            <div class="horaire-row">
+              <span>Lundi – Vendredi</span>
+              <span class="horaire-time">8h00 – 20h00</span>
+            </div>
+            <div class="horaire-row">
+              <span>Samedi</span>
+              <span class="horaire-time">9h00 – 18h00</span>
+            </div>
+            <div class="horaire-row">
+              <span>Dimanche</span>
+              <span class="horaire-time">10h00 – 16h00</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="horaire-card horaire-card-highlight reveal">
+          <div class="horaire-badge">Recommandé</div>
+          <div class="horaire-icon">
+            <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.5">
+              <path d="M24 4v8M24 36v8M4 24h8M36 24h8"/>
+              <circle cx="24" cy="24" r="12"/>
+              <path d="M24 18v6l4 4"/>
+            </svg>
+          </div>
+          <h3>Ligne Prioritaire</h3>
+          <div class="horaire-rows">
+            <div class="horaire-row">
+              <span>Lundi – Dimanche</span>
+              <span class="horaire-time highlight">7j/7 · 24h/24</span>
+            </div>
+          </div>
+          <p class="horaire-note">Pour nos membres Premium, un concierge dédié disponible à tout moment pour vos demandes urgentes.</p>
+        </div>
+
+        <div class="horaire-card reveal">
+          <div class="horaire-icon">
+            <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.5">
+              <rect x="6" y="10" width="36" height="28" rx="4"/>
+              <path d="M6 20h36M16 6v8M32 6v8"/>
+            </svg>
+          </div>
+          <h3>Interventions & Prestations</h3>
+          <div class="horaire-rows">
+            <div class="horaire-row">
+              <span>Lundi – Samedi</span>
+              <span class="horaire-time">7h00 – 21h00</span>
+            </div>
+            <div class="horaire-row">
+              <span>Dimanche & Jours fériés</span>
+              <span class="horaire-time">Sur demande</span>
+            </div>
+          </div>
+          <p class="horaire-note">Interventions d'urgence possibles en dehors des horaires standards pour nos abonnés.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Témoignages Section -->
+  <section class="temoignages" id="temoignages">
+    <div class="container">
+      <div class="section-header reveal">
+        <span class="section-tag">Témoignages</span>
+        <h2 class="section-title">Ce que disent<br><em>nos clients</em></h2>
+      </div>
+
+      <div class="temoignages-track" id="temoignagesTrack">
+        <div class="temoignage-card">
+          <div class="temoignage-stars">★★★★★</div>
+          <p class="temoignage-text">"Mae Conciergerie a transformé mon quotidien. Je ne pourrais plus me passer de leurs services. Réactifs, discrets et toujours de bon conseil."</p>
+          <div class="temoignage-author">
+            <div class="temoignage-avatar">SL</div>
+            <div>
+              <strong>Sophie L.</strong>
+              <span>Cliente Premium depuis 2023</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="temoignage-card">
+          <div class="temoignage-stars">★★★★★</div>
+          <p class="temoignage-text">"L'organisation de notre événement d'entreprise a été parfaite. Chaque détail était soigné. L'équipe Mae est tout simplement exceptionnelle."</p>
+          <div class="temoignage-author">
+            <div class="temoignage-avatar">MD</div>
+            <div>
+              <strong>Marc D.</strong>
+              <span>Directeur, Société Tech</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="temoignage-card">
+          <div class="temoignage-stars">★★★★★</div>
+          <p class="temoignage-text">"La gestion de notre résidence secondaire est irréprochable. Nous arrivons toujours dans une maison prête à vivre. Un vrai luxe au quotidien."</p>
+          <div class="temoignage-author">
+            <div class="temoignage-avatar">CA</div>
+            <div>
+              <strong>Claire & Antoine R.</strong>
+              <span>Propriétaires</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="temoignage-card">
+          <div class="temoignage-stars">★★★★★</div>
+          <p class="temoignage-text">"Disponibilité 24h/24, qualité des prestataires, suivi personnalisé… Tout est pensé pour notre confort. Je recommande sans hésiter."</p>
+          <div class="temoignage-author">
+            <div class="temoignage-avatar">PB</div>
+            <div>
+              <strong>Philippe B.</strong>
+              <span>Client depuis 2022</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="temoignages-nav">
+        <button class="temoignage-prev" id="temoPrev" aria-label="Précédent">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>
+        </button>
+        <button class="temoignage-next" id="temoNext" aria-label="Suivant">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA Section -->
+  <section class="cta">
+    <div class="cta-bg"></div>
+    <div class="container">
+      <div class="cta-content reveal">
+        <h2>Prêt à vivre l'expérience<br><em>Mae Conciergerie</em> ?</h2>
+        <p>Rejoignez nos clients privilégiés et redécouvrez le sens du service.</p>
+        <a href="#contact" class="btn btn-primary btn-lg">Demander un devis gratuit</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Contact Section -->
+  <section class="contact" id="contact">
+    <div class="container">
+      <div class="section-header reveal">
+        <span class="section-tag">Contact</span>
+        <h2 class="section-title">Parlons de<br><em>vos besoins</em></h2>
+      </div>
+
+      <div class="contact-grid">
+        <div class="contact-info reveal">
+          <div class="contact-item">
+            <div class="contact-item-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72c.127.96.362 1.903.7 2.81a2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.338 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg>
+            </div>
+            <div>
+              <strong>Téléphone</strong>
+              <p>+33 1 23 45 67 89</p>
+            </div>
+          </div>
+          <div class="contact-item">
+            <div class="contact-item-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="M22 7l-10 7L2 7"/></svg>
+            </div>
+            <div>
+              <strong>Email</strong>
+              <p>contact@mae-conciergerie.fr</p>
+            </div>
+          </div>
+          <div class="contact-item">
+            <div class="contact-item-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 1118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+            </div>
+            <div>
+              <strong>Adresse</strong>
+              <p>12 Avenue des Champs-Élysées<br>75008 Paris, France</p>
+            </div>
+          </div>
+          <div class="contact-socials">
+            <a href="#" class="contact-social" aria-label="Instagram">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect width="20" height="20" x="2" y="2" rx="5"/><circle cx="12" cy="12" r="5"/><circle cx="17.5" cy="6.5" r="1.5" fill="currentColor" stroke="none"/></svg>
+            </a>
+            <a href="#" class="contact-social" aria-label="LinkedIn">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-4 0v7h-4v-7a6 6 0 016-6zM2 9h4v12H2zM4 6a2 2 0 100-4 2 2 0 000 4z"/></svg>
+            </a>
+            <a href="#" class="contact-social" aria-label="Facebook">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3z"/></svg>
+            </a>
+          </div>
+        </div>
+
+        <form class="contact-form reveal" id="contactForm">
+          <div class="form-row">
+            <div class="form-group">
+              <label for="firstName">Prénom</label>
+              <input type="text" id="firstName" name="firstName" required placeholder="Votre prénom">
+            </div>
+            <div class="form-group">
+              <label for="lastName">Nom</label>
+              <input type="text" id="lastName" name="lastName" required placeholder="Votre nom">
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="email">Email</label>
+            <input type="email" id="email" name="email" required placeholder="votre@email.com">
+          </div>
+          <div class="form-group">
+            <label for="phone">Téléphone</label>
+            <input type="tel" id="phone" name="phone" placeholder="+33 6 00 00 00 00">
+          </div>
+          <div class="form-group">
+            <label for="service">Service souhaité</label>
+            <select id="service" name="service">
+              <option value="">Sélectionnez un service</option>
+              <option value="quotidien">Gestion du quotidien</option>
+              <option value="entretien">Entretien & maintenance</option>
+              <option value="evenementiel">Événementiel</option>
+              <option value="voyages">Voyages & loisirs</option>
+              <option value="home">Home Management</option>
+              <option value="autre">Autre demande</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="message">Message</label>
+            <textarea id="message" name="message" rows="4" placeholder="Décrivez-nous votre besoin…"></textarea>
+          </div>
+          <button type="submit" class="btn btn-primary btn-full">
+            <span>Envoyer ma demande</span>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </button>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <span class="footer-logo">Mae</span>
+          <p>Conciergerie de prestige au service de votre sérénité. L'excellence, à chaque instant.</p>
+        </div>
+        <div class="footer-col">
+          <h4>Services</h4>
+          <a href="#services">Gestion du quotidien</a>
+          <a href="#services">Entretien & maintenance</a>
+          <a href="#services">Événementiel</a>
+          <a href="#services">Voyages & loisirs</a>
+        </div>
+        <div class="footer-col">
+          <h4>Informations</h4>
+          <a href="#about">À propos</a>
+          <a href="#horaires">Horaires</a>
+          <a href="#temoignages">Témoignages</a>
+          <a href="#contact">Contact</a>
+        </div>
+        <div class="footer-col">
+          <h4>Légal</h4>
+          <a href="#">Mentions légales</a>
+          <a href="#">Politique de confidentialité</a>
+          <a href="#">CGV</a>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2026 Mae Conciergerie. Tous droits réservés.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
