@@ -1,3 +1,208 @@
+// ===== INTERACTIVE PAINT CANVAS BACKGROUND =====
+(function initPaintCanvas() {
+  const canvas = document.getElementById('paintCanvas');
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+
+  let w, h;
+  let scrollY = 0;
+  let lastScrollY = -1;
+  let mouseX = -100, mouseY = -100;
+  let animFrame;
+
+  // Paint stroke palette — pastel harmonious colors
+  const palette = [
+    { r: 196, g: 168, b: 130, a: 0.045 },  // warm brown
+    { r: 139, g: 167, b: 199, a: 0.04 },    // soft blue
+    { r: 184, g: 169, b: 201, a: 0.035 },   // lavender
+    { r: 212, g: 165, b: 165, a: 0.035 },   // rose
+    { r: 163, g: 181, b: 160, a: 0.03 },    // sage green
+    { r: 182, g: 207, b: 226, a: 0.035 },   // light blue
+    { r: 158, g: 124, b: 90,  a: 0.03 },    // deep brown accent
+  ];
+
+  // Pre-computed paint strokes to reveal on scroll
+  const strokes = [];
+  const TOTAL_STROKES = 60;
+
+  function resize() {
+    w = canvas.width = window.innerWidth;
+    h = canvas.height = window.innerHeight;
+  }
+
+  function generateStrokes() {
+    strokes.length = 0;
+    const pageH = document.documentElement.scrollHeight;
+
+    for (let i = 0; i < TOTAL_STROKES; i++) {
+      const color = palette[Math.floor(Math.random() * palette.length)];
+      const yTrigger = (i / TOTAL_STROKES) * pageH;
+
+      // Generate a bezier brush stroke path
+      const startX = Math.random() * w;
+      const startY = Math.random() * h;
+      const spread = 150 + Math.random() * 400;
+      const angle = Math.random() * Math.PI * 2;
+
+      const points = [];
+      const numPoints = 5 + Math.floor(Math.random() * 6);
+      for (let j = 0; j < numPoints; j++) {
+        const t = j / (numPoints - 1);
+        const drift = (Math.random() - 0.5) * 80;
+        points.push({
+          x: startX + Math.cos(angle) * spread * t + drift,
+          y: startY + Math.sin(angle) * spread * t + (Math.random() - 0.5) * 60
+        });
+      }
+
+      strokes.push({
+        points,
+        color,
+        lineWidth: 30 + Math.random() * 120,
+        yTrigger,
+        opacity: 0,
+        targetOpacity: 0,
+        side: Math.random() > 0.5 ? 1 : -1,
+        revealed: false,
+        rotateAngle: (Math.random() - 0.5) * 0.3
+      });
+    }
+  }
+
+  function drawBrushStroke(stroke) {
+    if (stroke.opacity < 0.002) return;
+
+    const pts = stroke.points;
+    if (pts.length < 2) return;
+
+    ctx.save();
+    ctx.globalAlpha = stroke.opacity;
+    ctx.globalCompositeOperation = 'multiply';
+
+    // Main brush body
+    ctx.beginPath();
+    ctx.moveTo(pts[0].x, pts[0].y);
+
+    for (let i = 1; i < pts.length - 1; i++) {
+      const xc = (pts[i].x + pts[i + 1].x) / 2;
+      const yc = (pts[i].y + pts[i + 1].y) / 2;
+      ctx.quadraticCurveTo(pts[i].x, pts[i].y, xc, yc);
+    }
+    ctx.quadraticCurveTo(
+      pts[pts.length - 2].x, pts[pts.length - 2].y,
+      pts[pts.length - 1].x, pts[pts.length - 1].y
+    );
+
+    ctx.lineWidth = stroke.lineWidth;
+    ctx.lineCap = 'round';
+    ctx.lineJoin = 'round';
+    const c = stroke.color;
+    ctx.strokeStyle = `rgba(${c.r},${c.g},${c.b},${c.a * 8})`;
+    ctx.stroke();
+
+    // Soft glow
+    ctx.lineWidth = stroke.lineWidth * 2;
+    ctx.strokeStyle = `rgba(${c.r},${c.g},${c.b},${c.a * 2})`;
+    ctx.filter = 'blur(20px)';
+    ctx.stroke();
+    ctx.filter = 'none';
+
+    ctx.restore();
+  }
+
+  // Mouse interaction — subtle watercolor ripple
+  let mouseStrokes = [];
+
+  function addMouseRipple(x, y) {
+    const color = palette[Math.floor(Math.random() * palette.length)];
+    mouseStrokes.push({
+      x, y,
+      radius: 0,
+      maxRadius: 40 + Math.random() * 60,
+      opacity: 0.12,
+      color
+    });
+    if (mouseStrokes.length > 8) mouseStrokes.shift();
+  }
+
+  function drawMouseRipples() {
+    mouseStrokes.forEach((ripple, i) => {
+      ripple.radius += (ripple.maxRadius - ripple.radius) * 0.06;
+      ripple.opacity *= 0.97;
+
+      if (ripple.opacity < 0.005) {
+        mouseStrokes.splice(i, 1);
+        return;
+      }
+
+      ctx.save();
+      ctx.globalCompositeOperation = 'multiply';
+      ctx.globalAlpha = ripple.opacity;
+      const grad = ctx.createRadialGradient(ripple.x, ripple.y, 0, ripple.x, ripple.y, ripple.radius);
+      const c = ripple.color;
+      grad.addColorStop(0, `rgba(${c.r},${c.g},${c.b},0.3)`);
+      grad.addColorStop(0.5, `rgba(${c.r},${c.g},${c.b},0.1)`);
+      grad.addColorStop(1, `rgba(${c.r},${c.g},${c.b},0)`);
+      ctx.fillStyle = grad;
+      ctx.beginPath();
+      ctx.arc(ripple.x, ripple.y, ripple.radius, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.restore();
+    });
+  }
+
+  function render() {
+    scrollY = window.scrollY;
+    const pageH = document.documentElement.scrollHeight - window.innerHeight;
+    const scrollProgress = pageH > 0 ? scrollY / pageH : 0;
+
+    ctx.clearRect(0, 0, w, h);
+
+    // Update strokes based on scroll
+    strokes.forEach(stroke => {
+      if (scrollY >= stroke.yTrigger - h * 0.6) {
+        stroke.targetOpacity = 1;
+      }
+      // Smooth fade in
+      stroke.opacity += (stroke.targetOpacity - stroke.opacity) * 0.04;
+
+      // Slight parallax shift based on scroll
+      const parallaxShift = (scrollY * 0.02) * stroke.side;
+      ctx.save();
+      ctx.translate(parallaxShift, 0);
+      drawBrushStroke(stroke);
+      ctx.restore();
+    });
+
+    // Mouse ripples
+    drawMouseRipples();
+
+    animFrame = requestAnimationFrame(render);
+  }
+
+  // Mouse move for ripples (throttled)
+  let lastRippleTime = 0;
+  document.addEventListener('mousemove', (e) => {
+    mouseX = e.clientX;
+    mouseY = e.clientY;
+    const now = Date.now();
+    if (now - lastRippleTime > 120) {
+      addMouseRipple(mouseX, mouseY);
+      lastRippleTime = now;
+    }
+  });
+
+  // Init
+  resize();
+  generateStrokes();
+  render();
+
+  window.addEventListener('resize', () => {
+    resize();
+    generateStrokes();
+  });
+})();
+
 // ===== LOADER =====
 window.addEventListener('load', () => {
   const loader = document.getElementById('loader');

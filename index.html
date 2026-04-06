@@ -10,6 +10,9 @@
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
+  <!-- Interactive Paint Background -->
+  <canvas class="paint-canvas" id="paintCanvas"></canvas>
+
   <!-- Cursor custom -->
   <div class="cursor-dot" id="cursorDot"></div>
   <div class="cursor-ring" id="cursorRing"></div>
@@ -413,28 +416,28 @@
             <div class="chart-container">
               <svg class="line-chart" id="chartTemps" viewBox="0 0 600 300" preserveAspectRatio="none">
                 <!-- Grid -->
-                <line x1="0" y1="60" x2="600" y2="60" stroke="rgba(255,255,255,0.04)" stroke-width="1"/>
-                <line x1="0" y1="120" x2="600" y2="120" stroke="rgba(255,255,255,0.04)" stroke-width="1"/>
-                <line x1="0" y1="180" x2="600" y2="180" stroke="rgba(255,255,255,0.04)" stroke-width="1"/>
-                <line x1="0" y1="240" x2="600" y2="240" stroke="rgba(255,255,255,0.04)" stroke-width="1"/>
+                <line x1="0" y1="60" x2="600" y2="60" stroke="rgba(0,0,0,0.06)" stroke-width="1"/>
+                <line x1="0" y1="120" x2="600" y2="120" stroke="rgba(0,0,0,0.06)" stroke-width="1"/>
+                <line x1="0" y1="180" x2="600" y2="180" stroke="rgba(0,0,0,0.06)" stroke-width="1"/>
+                <line x1="0" y1="240" x2="600" y2="240" stroke="rgba(0,0,0,0.06)" stroke-width="1"/>
                 <!-- Y labels -->
-                <text x="0" y="56" fill="rgba(255,255,255,0.3)" font-size="11" font-family="Inter">40h</text>
-                <text x="0" y="116" fill="rgba(255,255,255,0.3)" font-size="11" font-family="Inter">30h</text>
-                <text x="0" y="176" fill="rgba(255,255,255,0.3)" font-size="11" font-family="Inter">20h</text>
-                <text x="0" y="236" fill="rgba(255,255,255,0.3)" font-size="11" font-family="Inter">10h</text>
+                <text x="0" y="56" fill="rgba(0,0,0,0.35)" font-size="11" font-family="Inter">40h</text>
+                <text x="0" y="116" fill="rgba(0,0,0,0.35)" font-size="11" font-family="Inter">30h</text>
+                <text x="0" y="176" fill="rgba(0,0,0,0.35)" font-size="11" font-family="Inter">20h</text>
+                <text x="0" y="236" fill="rgba(0,0,0,0.35)" font-size="11" font-family="Inter">10h</text>
                 <!-- X labels -->
-                <text x="60" y="295" fill="rgba(255,255,255,0.3)" font-size="11" font-family="Inter" text-anchor="middle">Mois 1</text>
-                <text x="170" y="295" fill="rgba(255,255,255,0.3)" font-size="11" font-family="Inter" text-anchor="middle">Mois 3</text>
-                <text x="280" y="295" fill="rgba(255,255,255,0.3)" font-size="11" font-family="Inter" text-anchor="middle">Mois 6</text>
-                <text x="390" y="295" fill="rgba(255,255,255,0.3)" font-size="11" font-family="Inter" text-anchor="middle">Mois 9</text>
-                <text x="540" y="295" fill="rgba(255,255,255,0.3)" font-size="11" font-family="Inter" text-anchor="middle">Mois 12</text>
+                <text x="60" y="295" fill="rgba(0,0,0,0.35)" font-size="11" font-family="Inter" text-anchor="middle">Mois 1</text>
+                <text x="170" y="295" fill="rgba(0,0,0,0.35)" font-size="11" font-family="Inter" text-anchor="middle">Mois 3</text>
+                <text x="280" y="295" fill="rgba(0,0,0,0.35)" font-size="11" font-family="Inter" text-anchor="middle">Mois 6</text>
+                <text x="390" y="295" fill="rgba(0,0,0,0.35)" font-size="11" font-family="Inter" text-anchor="middle">Mois 9</text>
+                <text x="540" y="295" fill="rgba(0,0,0,0.35)" font-size="11" font-family="Inter" text-anchor="middle">Mois 12</text>
                 <!-- Sans Mae (flat line ~5h) -->
-                <polyline class="chart-line-muted" points="60,240 170,235 280,238 390,232 540,236" fill="none" stroke="rgba(255,255,255,0.15)" stroke-width="2" stroke-dasharray="6 4"/>
+                <polyline class="chart-line-muted" points="60,240 170,235 280,238 390,232 540,236" fill="none" stroke="rgba(0,0,0,0.12)" stroke-width="2" stroke-dasharray="6 4"/>
                 <!-- Avec Mae (courbe hausse) -->
                 <defs>
                   <linearGradient id="goldGrad" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="0%" stop-color="rgba(201,169,110,0.3)"/>
-                    <stop offset="100%" stop-color="rgba(201,169,110,0)"/>
+                    <stop offset="0%" stop-color="rgba(158,124,90,0.2)"/>
+                    <stop offset="100%" stop-color="rgba(158,124,90,0)"/>
                   </linearGradient>
                 </defs>
                 <path class="chart-area-fill" d="M60,220 C115,200 170,170 280,120 S450,50 540,30 L540,275 L60,275 Z" fill="url(#goldGrad)" opacity="0"/>
@@ -495,21 +498,21 @@
             </div>
             <div class="chart-container">
               <svg class="bar-chart" id="chartRevenus" viewBox="0 0 600 300" preserveAspectRatio="none">
-                <line x1="0" y1="60" x2="600" y2="60" stroke="rgba(255,255,255,0.04)" stroke-width="1"/>
-                <line x1="0" y1="120" x2="600" y2="120" stroke="rgba(255,255,255,0.04)" stroke-width="1"/>
-                <line x1="0" y1="180" x2="600" y2="180" stroke="rgba(255,255,255,0.04)" stroke-width="1"/>
-                <line x1="0" y1="240" x2="600" y2="240" stroke="rgba(255,255,255,0.04)" stroke-width="1"/>
-                <text x="0" y="56" fill="rgba(255,255,255,0.3)" font-size="11" font-family="Inter">+40%</text>
-                <text x="0" y="116" fill="rgba(255,255,255,0.3)" font-size="11" font-family="Inter">+30%</text>
-                <text x="0" y="176" fill="rgba(255,255,255,0.3)" font-size="11" font-family="Inter">+20%</text>
-                <text x="0" y="236" fill="rgba(255,255,255,0.3)" font-size="11" font-family="Inter">+10%</text>
+                <line x1="0" y1="60" x2="600" y2="60" stroke="rgba(0,0,0,0.06)" stroke-width="1"/>
+                <line x1="0" y1="120" x2="600" y2="120" stroke="rgba(0,0,0,0.06)" stroke-width="1"/>
+                <line x1="0" y1="180" x2="600" y2="180" stroke="rgba(0,0,0,0.06)" stroke-width="1"/>
+                <line x1="0" y1="240" x2="600" y2="240" stroke="rgba(0,0,0,0.06)" stroke-width="1"/>
+                <text x="0" y="56" fill="rgba(0,0,0,0.35)" font-size="11" font-family="Inter">+40%</text>
+                <text x="0" y="116" fill="rgba(0,0,0,0.35)" font-size="11" font-family="Inter">+30%</text>
+                <text x="0" y="176" fill="rgba(0,0,0,0.35)" font-size="11" font-family="Inter">+20%</text>
+                <text x="0" y="236" fill="rgba(0,0,0,0.35)" font-size="11" font-family="Inter">+10%</text>
                 <!-- Barres classiques (grises) -->
-                <rect class="bar-muted" x="55" y="210" width="28" height="65" rx="4" fill="rgba(255,255,255,0.08)"/>
-                <rect class="bar-muted" x="145" y="200" width="28" height="75" rx="4" fill="rgba(255,255,255,0.08)"/>
-                <rect class="bar-muted" x="235" y="195" width="28" height="80" rx="4" fill="rgba(255,255,255,0.08)"/>
-                <rect class="bar-muted" x="325" y="190" width="28" height="85" rx="4" fill="rgba(255,255,255,0.08)"/>
-                <rect class="bar-muted" x="415" y="188" width="28" height="87" rx="4" fill="rgba(255,255,255,0.08)"/>
-                <rect class="bar-muted" x="505" y="185" width="28" height="90" rx="4" fill="rgba(255,255,255,0.08)"/>
+                <rect class="bar-muted" x="55" y="210" width="28" height="65" rx="4" fill="rgba(0,0,0,0.06)"/>
+                <rect class="bar-muted" x="145" y="200" width="28" height="75" rx="4" fill="rgba(0,0,0,0.06)"/>
+                <rect class="bar-muted" x="235" y="195" width="28" height="80" rx="4" fill="rgba(0,0,0,0.06)"/>
+                <rect class="bar-muted" x="325" y="190" width="28" height="85" rx="4" fill="rgba(0,0,0,0.06)"/>
+                <rect class="bar-muted" x="415" y="188" width="28" height="87" rx="4" fill="rgba(0,0,0,0.06)"/>
+                <rect class="bar-muted" x="505" y="185" width="28" height="90" rx="4" fill="rgba(0,0,0,0.06)"/>
                 <!-- Barres Mae (dorées - croissance forte) -->
                 <defs>
                   <linearGradient id="barGold" x1="0" y1="0" x2="0" y2="1">
@@ -524,12 +527,12 @@
                 <rect class="bar-gold" x="447" y="275" width="28" height="0" rx="4" fill="url(#barGold)" data-target-y="65" data-target-h="210"/>
                 <rect class="bar-gold" x="537" y="275" width="28" height="0" rx="4" fill="url(#barGold)" data-target-y="35" data-target-h="240"/>
                 <!-- X labels -->
-                <text x="82" y="295" fill="rgba(255,255,255,0.3)" font-size="10" font-family="Inter" text-anchor="middle">Mois 2</text>
-                <text x="172" y="295" fill="rgba(255,255,255,0.3)" font-size="10" font-family="Inter" text-anchor="middle">Mois 4</text>
-                <text x="262" y="295" fill="rgba(255,255,255,0.3)" font-size="10" font-family="Inter" text-anchor="middle">Mois 6</text>
-                <text x="352" y="295" fill="rgba(255,255,255,0.3)" font-size="10" font-family="Inter" text-anchor="middle">Mois 8</text>
-                <text x="442" y="295" fill="rgba(255,255,255,0.3)" font-size="10" font-family="Inter" text-anchor="middle">Mois 10</text>
-                <text x="552" y="295" fill="rgba(255,255,255,0.3)" font-size="10" font-family="Inter" text-anchor="middle">Mois 12</text>
+                <text x="82" y="295" fill="rgba(0,0,0,0.35)" font-size="10" font-family="Inter" text-anchor="middle">Mois 2</text>
+                <text x="172" y="295" fill="rgba(0,0,0,0.35)" font-size="10" font-family="Inter" text-anchor="middle">Mois 4</text>
+                <text x="262" y="295" fill="rgba(0,0,0,0.35)" font-size="10" font-family="Inter" text-anchor="middle">Mois 6</text>
+                <text x="352" y="295" fill="rgba(0,0,0,0.35)" font-size="10" font-family="Inter" text-anchor="middle">Mois 8</text>
+                <text x="442" y="295" fill="rgba(0,0,0,0.35)" font-size="10" font-family="Inter" text-anchor="middle">Mois 10</text>
+                <text x="552" y="295" fill="rgba(0,0,0,0.35)" font-size="10" font-family="Inter" text-anchor="middle">Mois 12</text>
               </svg>
             </div>
           </div>
@@ -660,7 +663,7 @@
               <div class="revenue-total-sub">soit jusqu'à <strong>17 760€/an</strong> de gains supplémentaires</div>
               <div class="revenue-gauge">
                 <svg viewBox="0 0 200 100" class="gauge-svg">
-                  <path d="M20,90 A80,80 0 0,1 180,90" fill="none" stroke="rgba(255,255,255,0.06)" stroke-width="12" stroke-linecap="round"/>
+                  <path d="M20,90 A80,80 0 0,1 180,90" fill="none" stroke="rgba(0,0,0,0.08)" stroke-width="12" stroke-linecap="round"/>
                   <path class="gauge-fill" d="M20,90 A80,80 0 0,1 180,90" fill="none" stroke="url(#gaugeGrad)" stroke-width="12" stroke-linecap="round" stroke-dasharray="251" stroke-dashoffset="251"/>
                   <defs>
                     <linearGradient id="gaugeGrad" x1="0" y1="0" x2="1" y2="0">
