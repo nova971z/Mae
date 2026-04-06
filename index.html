@@ -33,6 +33,7 @@
         <a href="#services" class="nav-link">Services</a>
         <a href="#about" class="nav-link">À propos</a>
         <a href="#horaires" class="nav-link">Horaires</a>
+        <a href="#performances" class="nav-link">Performances</a>
         <a href="#temoignages" class="nav-link">Témoignages</a>
         <a href="#contact" class="nav-link">Contact</a>
       </div>
@@ -372,6 +373,338 @@
       </div>
     </div>
   </section>
+
+  <!-- Performances / ROI Section -->
+  <section class="performances" id="performances">
+    <div class="container">
+      <div class="section-header reveal">
+        <span class="section-tag">Résultats prouvés</span>
+        <h2 class="section-title">Votre temps et vos revenus<br><em>démultipliés</em></h2>
+        <p class="section-desc">Nos clients constatent un gain de temps considérable et une hausse significative de leurs revenus locatifs grâce à nos solutions.</p>
+      </div>
+
+      <!-- Tabs de sélection -->
+      <div class="perf-tabs reveal">
+        <button class="perf-tab active" data-tab="temps">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+          <span>Gain de temps</span>
+        </button>
+        <button class="perf-tab" data-tab="revenus">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg>
+          <span>Rendement locatif</span>
+        </button>
+        <button class="perf-tab" data-tab="services">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-4 0v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/></svg>
+          <span>Nouveaux services</span>
+        </button>
+      </div>
+
+      <!-- Panel: Gain de temps -->
+      <div class="perf-panel active" id="panel-temps">
+        <div class="perf-panel-grid">
+          <div class="perf-chart-area reveal">
+            <div class="perf-chart-header">
+              <h3>Heures récupérées par mois</h3>
+              <div class="perf-chart-legend">
+                <span class="legend-item"><span class="legend-dot legend-dot-muted"></span>Sans Mae</span>
+                <span class="legend-item"><span class="legend-dot legend-dot-accent"></span>Avec Mae</span>
+              </div>
+            </div>
+            <div class="chart-container">
+              <svg class="line-chart" id="chartTemps" viewBox="0 0 600 300" preserveAspectRatio="none">
+                <!-- Grid -->
+                <line x1="0" y1="60" x2="600" y2="60" stroke="rgba(255,255,255,0.04)" stroke-width="1"/>
+                <line x1="0" y1="120" x2="600" y2="120" stroke="rgba(255,255,255,0.04)" stroke-width="1"/>
+                <line x1="0" y1="180" x2="600" y2="180" stroke="rgba(255,255,255,0.04)" stroke-width="1"/>
+                <line x1="0" y1="240" x2="600" y2="240" stroke="rgba(255,255,255,0.04)" stroke-width="1"/>
+                <!-- Y labels -->
+                <text x="0" y="56" fill="rgba(255,255,255,0.3)" font-size="11" font-family="Inter">40h</text>
+                <text x="0" y="116" fill="rgba(255,255,255,0.3)" font-size="11" font-family="Inter">30h</text>
+                <text x="0" y="176" fill="rgba(255,255,255,0.3)" font-size="11" font-family="Inter">20h</text>
+                <text x="0" y="236" fill="rgba(255,255,255,0.3)" font-size="11" font-family="Inter">10h</text>
+                <!-- X labels -->
+                <text x="60" y="295" fill="rgba(255,255,255,0.3)" font-size="11" font-family="Inter" text-anchor="middle">Mois 1</text>
+                <text x="170" y="295" fill="rgba(255,255,255,0.3)" font-size="11" font-family="Inter" text-anchor="middle">Mois 3</text>
+                <text x="280" y="295" fill="rgba(255,255,255,0.3)" font-size="11" font-family="Inter" text-anchor="middle">Mois 6</text>
+                <text x="390" y="295" fill="rgba(255,255,255,0.3)" font-size="11" font-family="Inter" text-anchor="middle">Mois 9</text>
+                <text x="540" y="295" fill="rgba(255,255,255,0.3)" font-size="11" font-family="Inter" text-anchor="middle">Mois 12</text>
+                <!-- Sans Mae (flat line ~5h) -->
+                <polyline class="chart-line-muted" points="60,240 170,235 280,238 390,232 540,236" fill="none" stroke="rgba(255,255,255,0.15)" stroke-width="2" stroke-dasharray="6 4"/>
+                <!-- Avec Mae (courbe hausse) -->
+                <defs>
+                  <linearGradient id="goldGrad" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%" stop-color="rgba(201,169,110,0.3)"/>
+                    <stop offset="100%" stop-color="rgba(201,169,110,0)"/>
+                  </linearGradient>
+                </defs>
+                <path class="chart-area-fill" d="M60,220 C115,200 170,170 280,120 S450,50 540,30 L540,275 L60,275 Z" fill="url(#goldGrad)" opacity="0"/>
+                <polyline class="chart-line-gold" points="60,220 170,170 280,120 390,70 540,30" fill="none" stroke="var(--color-accent)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="800" stroke-dashoffset="800"/>
+                <!-- Dot points -->
+                <circle class="chart-dot" cx="60" cy="220" r="5" fill="var(--color-accent)" opacity="0"/>
+                <circle class="chart-dot" cx="170" cy="170" r="5" fill="var(--color-accent)" opacity="0"/>
+                <circle class="chart-dot" cx="280" cy="120" r="5" fill="var(--color-accent)" opacity="0"/>
+                <circle class="chart-dot" cx="390" cy="70" r="5" fill="var(--color-accent)" opacity="0"/>
+                <circle class="chart-dot" cx="540" cy="30" r="5" fill="var(--color-accent)" opacity="0"/>
+              </svg>
+              <!-- Tooltip -->
+              <div class="chart-tooltip" id="chartTooltip"></div>
+            </div>
+          </div>
+          <div class="perf-kpis reveal">
+            <div class="perf-kpi">
+              <div class="perf-kpi-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M13 17l5-5-5-5M6 17l5-5-5-5"/></svg>
+              </div>
+              <div class="perf-kpi-value" data-target="35">0</div>
+              <div class="perf-kpi-unit">heures/mois</div>
+              <div class="perf-kpi-label">Temps récupéré en moyenne</div>
+              <div class="perf-kpi-bar"><div class="perf-kpi-bar-fill" data-width="87"></div></div>
+            </div>
+            <div class="perf-kpi">
+              <div class="perf-kpi-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><path d="M22 4L12 14.01l-3-3"/></svg>
+              </div>
+              <div class="perf-kpi-value" data-target="94">0</div>
+              <div class="perf-kpi-unit">%</div>
+              <div class="perf-kpi-label">Tâches déléguées avec succès</div>
+              <div class="perf-kpi-bar"><div class="perf-kpi-bar-fill" data-width="94"></div></div>
+            </div>
+            <div class="perf-kpi">
+              <div class="perf-kpi-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+              </div>
+              <div class="perf-kpi-value" data-target="2">0</div>
+              <div class="perf-kpi-unit">heures</div>
+              <div class="perf-kpi-label">Temps de réponse moyen</div>
+              <div class="perf-kpi-bar"><div class="perf-kpi-bar-fill" data-width="20"></div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Panel: Rendement locatif -->
+      <div class="perf-panel" id="panel-revenus">
+        <div class="perf-panel-grid">
+          <div class="perf-chart-area reveal">
+            <div class="perf-chart-header">
+              <h3>Évolution du rendement locatif</h3>
+              <div class="perf-chart-legend">
+                <span class="legend-item"><span class="legend-dot legend-dot-muted"></span>Gestion classique</span>
+                <span class="legend-item"><span class="legend-dot legend-dot-accent"></span>Optimiseur Mae</span>
+              </div>
+            </div>
+            <div class="chart-container">
+              <svg class="bar-chart" id="chartRevenus" viewBox="0 0 600 300" preserveAspectRatio="none">
+                <line x1="0" y1="60" x2="600" y2="60" stroke="rgba(255,255,255,0.04)" stroke-width="1"/>
+                <line x1="0" y1="120" x2="600" y2="120" stroke="rgba(255,255,255,0.04)" stroke-width="1"/>
+                <line x1="0" y1="180" x2="600" y2="180" stroke="rgba(255,255,255,0.04)" stroke-width="1"/>
+                <line x1="0" y1="240" x2="600" y2="240" stroke="rgba(255,255,255,0.04)" stroke-width="1"/>
+                <text x="0" y="56" fill="rgba(255,255,255,0.3)" font-size="11" font-family="Inter">+40%</text>
+                <text x="0" y="116" fill="rgba(255,255,255,0.3)" font-size="11" font-family="Inter">+30%</text>
+                <text x="0" y="176" fill="rgba(255,255,255,0.3)" font-size="11" font-family="Inter">+20%</text>
+                <text x="0" y="236" fill="rgba(255,255,255,0.3)" font-size="11" font-family="Inter">+10%</text>
+                <!-- Barres classiques (grises) -->
+                <rect class="bar-muted" x="55" y="210" width="28" height="65" rx="4" fill="rgba(255,255,255,0.08)"/>
+                <rect class="bar-muted" x="145" y="200" width="28" height="75" rx="4" fill="rgba(255,255,255,0.08)"/>
+                <rect class="bar-muted" x="235" y="195" width="28" height="80" rx="4" fill="rgba(255,255,255,0.08)"/>
+                <rect class="bar-muted" x="325" y="190" width="28" height="85" rx="4" fill="rgba(255,255,255,0.08)"/>
+                <rect class="bar-muted" x="415" y="188" width="28" height="87" rx="4" fill="rgba(255,255,255,0.08)"/>
+                <rect class="bar-muted" x="505" y="185" width="28" height="90" rx="4" fill="rgba(255,255,255,0.08)"/>
+                <!-- Barres Mae (dorées - croissance forte) -->
+                <defs>
+                  <linearGradient id="barGold" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%" stop-color="var(--color-accent-light)"/>
+                    <stop offset="100%" stop-color="var(--color-accent-dark)"/>
+                  </linearGradient>
+                </defs>
+                <rect class="bar-gold" x="87" y="275" width="28" height="0" rx="4" fill="url(#barGold)" data-target-y="190" data-target-h="85"/>
+                <rect class="bar-gold" x="177" y="275" width="28" height="0" rx="4" fill="url(#barGold)" data-target-y="155" data-target-h="120"/>
+                <rect class="bar-gold" x="267" y="275" width="28" height="0" rx="4" fill="url(#barGold)" data-target-y="120" data-target-h="155"/>
+                <rect class="bar-gold" x="357" y="275" width="28" height="0" rx="4" fill="url(#barGold)" data-target-y="90" data-target-h="185"/>
+                <rect class="bar-gold" x="447" y="275" width="28" height="0" rx="4" fill="url(#barGold)" data-target-y="65" data-target-h="210"/>
+                <rect class="bar-gold" x="537" y="275" width="28" height="0" rx="4" fill="url(#barGold)" data-target-y="35" data-target-h="240"/>
+                <!-- X labels -->
+                <text x="82" y="295" fill="rgba(255,255,255,0.3)" font-size="10" font-family="Inter" text-anchor="middle">Mois 2</text>
+                <text x="172" y="295" fill="rgba(255,255,255,0.3)" font-size="10" font-family="Inter" text-anchor="middle">Mois 4</text>
+                <text x="262" y="295" fill="rgba(255,255,255,0.3)" font-size="10" font-family="Inter" text-anchor="middle">Mois 6</text>
+                <text x="352" y="295" fill="rgba(255,255,255,0.3)" font-size="10" font-family="Inter" text-anchor="middle">Mois 8</text>
+                <text x="442" y="295" fill="rgba(255,255,255,0.3)" font-size="10" font-family="Inter" text-anchor="middle">Mois 10</text>
+                <text x="552" y="295" fill="rgba(255,255,255,0.3)" font-size="10" font-family="Inter" text-anchor="middle">Mois 12</text>
+              </svg>
+            </div>
+          </div>
+          <div class="perf-kpis reveal">
+            <div class="perf-kpi">
+              <div class="perf-kpi-icon perf-kpi-icon-up">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M7 17l9.2-9.2M17 17V7.8H7.8"/></svg>
+              </div>
+              <div class="perf-kpi-value" data-target="42">0</div>
+              <div class="perf-kpi-unit">%</div>
+              <div class="perf-kpi-label">Hausse moyenne du rendement</div>
+              <div class="perf-kpi-bar"><div class="perf-kpi-bar-fill" data-width="85"></div></div>
+            </div>
+            <div class="perf-kpi">
+              <div class="perf-kpi-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20 7l-8 5-8-5M20 7v10l-8 5-8-5V7l8-5 8 5z"/></svg>
+              </div>
+              <div class="perf-kpi-value" data-target="8500">0</div>
+              <div class="perf-kpi-unit">€/an</div>
+              <div class="perf-kpi-label">Gains supplémentaires moyens</div>
+              <div class="perf-kpi-bar"><div class="perf-kpi-bar-fill" data-width="78"></div></div>
+            </div>
+            <div class="perf-kpi">
+              <div class="perf-kpi-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M16 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2M8.5 11a4 4 0 100-8 4 4 0 000 8zM20 8v6M23 11h-6"/></svg>
+              </div>
+              <div class="perf-kpi-value" data-target="320">0</div>
+              <div class="perf-kpi-unit">clients</div>
+              <div class="perf-kpi-label">Utilisent notre optimiseur</div>
+              <div class="perf-kpi-bar"><div class="perf-kpi-bar-fill" data-width="64"></div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Panel: Nouveaux services -->
+      <div class="perf-panel" id="panel-services">
+        <div class="perf-panel-grid perf-panel-services">
+          <div class="perf-new-services reveal">
+            <h3 class="perf-services-title">Services additionnels pour votre logement</h3>
+            <p class="perf-services-desc">Chaque service déployé dans votre bien génère des revenus supplémentaires tout en augmentant la satisfaction de vos locataires.</p>
+
+            <div class="new-service-items">
+              <div class="new-service-item" data-revenue="180">
+                <div class="new-service-icon">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5 3v4M3 5h4M6 17v4M4 19h4M13 3l2 2-2 2M19.07 4.93l-1.41 1.41"/><circle cx="12" cy="12" r="3"/><path d="M12 19a7 7 0 100-14 7 7 0 000 14z"/></svg>
+                </div>
+                <div class="new-service-info">
+                  <strong>Pack Bien-être</strong>
+                  <span>Linge hôtelier, produits d'accueil premium, aromathérapie</span>
+                </div>
+                <div class="new-service-revenue">
+                  <span class="revenue-amount">+180€</span>
+                  <span class="revenue-period">/mois</span>
+                </div>
+                <div class="new-service-bar"><div class="new-service-bar-fill" data-width="72"></div></div>
+              </div>
+
+              <div class="new-service-item" data-revenue="350">
+                <div class="new-service-icon">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>
+                </div>
+                <div class="new-service-info">
+                  <strong>Domotique & Confort</strong>
+                  <span>Check-in automatisé, thermostat intelligent, éclairage connecté</span>
+                </div>
+                <div class="new-service-revenue">
+                  <span class="revenue-amount">+350€</span>
+                  <span class="revenue-period">/mois</span>
+                </div>
+                <div class="new-service-bar"><div class="new-service-bar-fill" data-width="88"></div></div>
+              </div>
+
+              <div class="new-service-item" data-revenue="220">
+                <div class="new-service-icon">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6M16 13H8M16 17H8M10 9H8"/></svg>
+                </div>
+                <div class="new-service-info">
+                  <strong>Communication Pro</strong>
+                  <span>Annonces optimisées, photos HDR, réponses automatisées, pricing dynamique</span>
+                </div>
+                <div class="new-service-revenue">
+                  <span class="revenue-amount">+220€</span>
+                  <span class="revenue-period">/mois</span>
+                </div>
+                <div class="new-service-bar"><div class="new-service-bar-fill" data-width="65"></div></div>
+              </div>
+
+              <div class="new-service-item" data-revenue="280">
+                <div class="new-service-icon">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                </div>
+                <div class="new-service-info">
+                  <strong>Maintenance Premium</strong>
+                  <span>Entretien préventif, intervention express, garantie satisfaction</span>
+                </div>
+                <div class="new-service-revenue">
+                  <span class="revenue-amount">+280€</span>
+                  <span class="revenue-period">/mois</span>
+                </div>
+                <div class="new-service-bar"><div class="new-service-bar-fill" data-width="78"></div></div>
+              </div>
+
+              <div class="new-service-item" data-revenue="450">
+                <div class="new-service-icon">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z"/><path d="M3.27 6.96L12 12.01l8.73-5.05M12 22.08V12"/></svg>
+                </div>
+                <div class="new-service-info">
+                  <strong>Pack Full Service</strong>
+                  <span>Gestion complète, conciergerie 360°, reporting mensuel détaillé</span>
+                </div>
+                <div class="new-service-revenue">
+                  <span class="revenue-amount">+450€</span>
+                  <span class="revenue-period">/mois</span>
+                </div>
+                <div class="new-service-bar"><div class="new-service-bar-fill" data-width="95"></div></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="perf-revenue-summary reveal">
+            <div class="revenue-total-card">
+              <span class="revenue-total-label">Revenus additionnels potentiels</span>
+              <div class="revenue-total-amount">
+                <span class="revenue-counter" id="revenueCounter">0</span>
+                <span class="revenue-currency">€/mois</span>
+              </div>
+              <div class="revenue-total-sub">soit jusqu'à <strong>17 760€/an</strong> de gains supplémentaires</div>
+              <div class="revenue-gauge">
+                <svg viewBox="0 0 200 100" class="gauge-svg">
+                  <path d="M20,90 A80,80 0 0,1 180,90" fill="none" stroke="rgba(255,255,255,0.06)" stroke-width="12" stroke-linecap="round"/>
+                  <path class="gauge-fill" d="M20,90 A80,80 0 0,1 180,90" fill="none" stroke="url(#gaugeGrad)" stroke-width="12" stroke-linecap="round" stroke-dasharray="251" stroke-dashoffset="251"/>
+                  <defs>
+                    <linearGradient id="gaugeGrad" x1="0" y1="0" x2="1" y2="0">
+                      <stop offset="0%" stop-color="var(--color-accent-dark)"/>
+                      <stop offset="100%" stop-color="var(--color-accent-light)"/>
+                    </linearGradient>
+                  </defs>
+                </svg>
+                <div class="gauge-label">ROI</div>
+              </div>
+            </div>
+            <a href="#contact" class="btn btn-primary btn-full">Activer mes services</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Floating interactive elements -->
+    <div class="perf-floating">
+      <div class="perf-float-orb perf-float-orb-1"></div>
+      <div class="perf-float-orb perf-float-orb-2"></div>
+      <div class="perf-float-orb perf-float-orb-3"></div>
+    </div>
+  </section>
+
+  <!-- Interactive marquee -->
+  <div class="marquee-section">
+    <div class="marquee-track">
+      <div class="marquee-content">
+        <span>Gain de temps</span><span class="marquee-dot">◆</span>
+        <span>Rendement optimisé</span><span class="marquee-dot">◆</span>
+        <span>Services premium</span><span class="marquee-dot">◆</span>
+        <span>Revenus multipliés</span><span class="marquee-dot">◆</span>
+        <span>Satisfaction garantie</span><span class="marquee-dot">◆</span>
+        <span>Gestion intelligente</span><span class="marquee-dot">◆</span>
+        <span>Gain de temps</span><span class="marquee-dot">◆</span>
+        <span>Rendement optimisé</span><span class="marquee-dot">◆</span>
+        <span>Services premium</span><span class="marquee-dot">◆</span>
+        <span>Revenus multipliés</span><span class="marquee-dot">◆</span>
+        <span>Satisfaction garantie</span><span class="marquee-dot">◆</span>
+        <span>Gestion intelligente</span><span class="marquee-dot">◆</span>
+      </div>
+    </div>
+  </div>
 
   <!-- CTA Section -->
   <section class="cta">
