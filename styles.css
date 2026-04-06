@@ -43,6 +43,7 @@ html {
   height: 100%;
   z-index: 0;
   pointer-events: none;
+  will-change: transform;
 }
 
 body > *:not(.paint-canvas):not(.cursor-dot):not(.cursor-ring):not(.loader) {
@@ -317,6 +318,7 @@ em { font-style: normal; color: var(--color-accent); }
   text-align: center;
   padding: 0 24px;
   max-width: 720px;
+  will-change: transform, opacity;
 }
 
 .hero-badge {
@@ -1642,11 +1644,41 @@ em { font-style: normal; color: var(--color-accent); }
   100% { transform: translateX(-50%); }
 }
 
+/* ===== HERO ENTRANCE ANIMATIONS ===== */
+.hero-badge {
+  opacity: 0;
+  transform: translateY(12px);
+}
+
+.hero-title-line {
+  opacity: 0;
+  transform: translateY(40px);
+  transition: opacity 0.9s var(--ease-smooth), transform 0.9s var(--ease-smooth);
+}
+
+.hero-title-line.hero-line-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.hero-subtitle,
+.hero-actions {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.8s 0s var(--ease-smooth), transform 0.8s 0s var(--ease-smooth);
+}
+
+.hero-subtitle.hero-fade-in,
+.hero-actions.hero-fade-in {
+  opacity: 1;
+  transform: translateY(0);
+}
+
 /* ===== REVEAL ANIMATIONS ===== */
 .reveal {
   opacity: 0;
-  transform: translateY(30px);
-  transition: opacity 0.8s var(--ease-smooth), transform 0.8s var(--ease-smooth);
+  transform: translateY(40px);
+  transition: opacity 1s var(--ease-smooth), transform 1s var(--ease-smooth);
 }
 
 .reveal.visible {
@@ -1655,14 +1687,24 @@ em { font-style: normal; color: var(--color-accent); }
 }
 
 /* Stagger children */
-.services-grid .reveal:nth-child(2) { transition-delay: 0.1s; }
-.services-grid .reveal:nth-child(3) { transition-delay: 0.2s; }
-.services-grid .reveal:nth-child(4) { transition-delay: 0.3s; }
-.services-grid .reveal:nth-child(5) { transition-delay: 0.4s; }
-.services-grid .reveal:nth-child(6) { transition-delay: 0.5s; }
+.services-grid .reveal:nth-child(1) { transition-delay: 0s; }
+.services-grid .reveal:nth-child(2) { transition-delay: 0.08s; }
+.services-grid .reveal:nth-child(3) { transition-delay: 0.16s; }
+.services-grid .reveal:nth-child(4) { transition-delay: 0.24s; }
+.services-grid .reveal:nth-child(5) { transition-delay: 0.32s; }
+.services-grid .reveal:nth-child(6) { transition-delay: 0.4s; }
 
+.horaires-grid .reveal:nth-child(1) { transition-delay: 0s; }
 .horaires-grid .reveal:nth-child(2) { transition-delay: 0.1s; }
 .horaires-grid .reveal:nth-child(3) { transition-delay: 0.2s; }
+
+.about-stats .stat { transition: transform 0.6s var(--ease-smooth), box-shadow 0.4s; }
+
+/* Section smooth transitions */
+section {
+  transition: transform 0.4s var(--ease-smooth);
+  will-change: transform;
+}
 
 /* ===== SMOOTH SCROLL OFFSET ===== */
 section[id] {

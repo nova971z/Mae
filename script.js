@@ -2,193 +2,240 @@
 (function initPaintCanvas() {
   const canvas = document.getElementById('paintCanvas');
   if (!canvas) return;
-  const ctx = canvas.getContext('2d');
+  const ctx = canvas.getContext('2d', { alpha: true });
+
+  // Offscreen buffer for baked strokes (no re-render flicker)
+  const offscreen = document.createElement('canvas');
+  const offCtx = offscreen.getContext('2d');
 
   let w, h;
-  let scrollY = 0;
-  let lastScrollY = -1;
-  let mouseX = -100, mouseY = -100;
-  let animFrame;
+  let currentScrollY = 0;
+  let smoothScrollY = 0;
+  let mouseX = -200, mouseY = -200;
 
-  // Paint stroke palette — pastel harmonious colors
   const palette = [
-    { r: 196, g: 168, b: 130, a: 0.045 },  // warm brown
-    { r: 139, g: 167, b: 199, a: 0.04 },    // soft blue
-    { r: 184, g: 169, b: 201, a: 0.035 },   // lavender
-    { r: 212, g: 165, b: 165, a: 0.035 },   // rose
-    { r: 163, g: 181, b: 160, a: 0.03 },    // sage green
-    { r: 182, g: 207, b: 226, a: 0.035 },   // light blue
-    { r: 158, g: 124, b: 90,  a: 0.03 },    // deep brown accent
+    { r: 196, g: 168, b: 130 },  // warm brown
+    { r: 139, g: 167, b: 199 },  // soft blue
+    { r: 184, g: 169, b: 201 },  // lavender
+    { r: 212, g: 165, b: 165 },  // rose
+    { r: 163, g: 181, b: 160 },  // sage green
+    { r: 182, g: 207, b: 226 },  // light blue
+    { r: 210, g: 190, b: 160 },  // sand
   ];
 
-  // Pre-computed paint strokes to reveal on scroll
   const strokes = [];
-  const TOTAL_STROKES = 60;
+  const TOTAL_STROKES = 45;
+  let bakedStrokeCount = 0;
+
+  // Mouse trail
+  const trail = [];
+  const MAX_TRAIL = 30;
+  let lastTrailTime = 0;
 
   function resize() {
-    w = canvas.width = window.innerWidth;
-    h = canvas.height = window.innerHeight;
+    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+    w = window.innerWidth;
+    h = window.innerHeight;
+    canvas.width = w * dpr;
+    canvas.height = h * dpr;
+    canvas.style.width = w + 'px';
+    canvas.style.height = h + 'px';
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+
+    offscreen.width = w * dpr;
+    offscreen.height = h * dpr;
+    offCtx.setTransform(dpr, 0, 0, dpr, 0, 0);
+
+    // Rebake all revealed strokes
+    bakedStrokeCount = 0;
+    offCtx.clearRect(0, 0, w, h);
+    strokes.forEach(s => {
+      if (s.baked) {
+        s.baked = false;
+        s.opacity = 1;
+        s.targetOpacity = 1;
+      }
+    });
   }
 
   function generateStrokes() {
     strokes.length = 0;
+    bakedStrokeCount = 0;
     const pageH = document.documentElement.scrollHeight;
 
     for (let i = 0; i < TOTAL_STROKES; i++) {
       const color = palette[Math.floor(Math.random() * palette.length)];
       const yTrigger = (i / TOTAL_STROKES) * pageH;
 
-      // Generate a bezier brush stroke path
       const startX = Math.random() * w;
       const startY = Math.random() * h;
-      const spread = 150 + Math.random() * 400;
+      const spread = 120 + Math.random() * 350;
       const angle = Math.random() * Math.PI * 2;
 
       const points = [];
-      const numPoints = 5 + Math.floor(Math.random() * 6);
+      const numPoints = 4 + Math.floor(Math.random() * 5);
       for (let j = 0; j < numPoints; j++) {
         const t = j / (numPoints - 1);
-        const drift = (Math.random() - 0.5) * 80;
+        const drift = (Math.random() - 0.5) * 70;
         points.push({
           x: startX + Math.cos(angle) * spread * t + drift,
-          y: startY + Math.sin(angle) * spread * t + (Math.random() - 0.5) * 60
+          y: startY + Math.sin(angle) * spread * t + (Math.random() - 0.5) * 50
         });
       }
 
       strokes.push({
         points,
         color,
-        lineWidth: 30 + Math.random() * 120,
+        lineWidth: 40 + Math.random() * 100,
+        alpha: 0.06 + Math.random() * 0.08,
         yTrigger,
         opacity: 0,
         targetOpacity: 0,
-        side: Math.random() > 0.5 ? 1 : -1,
-        revealed: false,
-        rotateAngle: (Math.random() - 0.5) * 0.3
+        baked: false,
+        parallax: (Math.random() - 0.5) * 0.03
       });
     }
   }
 
-  function drawBrushStroke(stroke) {
-    if (stroke.opacity < 0.002) return;
-
+  // Draw a single stroke to a given context
+  function drawStrokeTo(target, stroke, alpha) {
     const pts = stroke.points;
     if (pts.length < 2) return;
 
-    ctx.save();
-    ctx.globalAlpha = stroke.opacity;
-    ctx.globalCompositeOperation = 'multiply';
+    target.save();
+    target.globalAlpha = alpha;
+    target.globalCompositeOperation = 'multiply';
+    target.lineCap = 'round';
+    target.lineJoin = 'round';
 
-    // Main brush body
-    ctx.beginPath();
-    ctx.moveTo(pts[0].x, pts[0].y);
-
+    // Build path once
+    target.beginPath();
+    target.moveTo(pts[0].x, pts[0].y);
     for (let i = 1; i < pts.length - 1; i++) {
       const xc = (pts[i].x + pts[i + 1].x) / 2;
       const yc = (pts[i].y + pts[i + 1].y) / 2;
-      ctx.quadraticCurveTo(pts[i].x, pts[i].y, xc, yc);
+      target.quadraticCurveTo(pts[i].x, pts[i].y, xc, yc);
     }
-    ctx.quadraticCurveTo(
+    target.quadraticCurveTo(
       pts[pts.length - 2].x, pts[pts.length - 2].y,
       pts[pts.length - 1].x, pts[pts.length - 1].y
     );
 
-    ctx.lineWidth = stroke.lineWidth;
-    ctx.lineCap = 'round';
-    ctx.lineJoin = 'round';
     const c = stroke.color;
-    ctx.strokeStyle = `rgba(${c.r},${c.g},${c.b},${c.a * 8})`;
-    ctx.stroke();
 
-    // Soft glow
-    ctx.lineWidth = stroke.lineWidth * 2;
-    ctx.strokeStyle = `rgba(${c.r},${c.g},${c.b},${c.a * 2})`;
-    ctx.filter = 'blur(20px)';
-    ctx.stroke();
-    ctx.filter = 'none';
+    // Soft wide pass (shadow/glow via wider stroke, no filter)
+    target.lineWidth = stroke.lineWidth * 1.8;
+    target.strokeStyle = `rgba(${c.r},${c.g},${c.b},${stroke.alpha * 0.3})`;
+    target.stroke();
 
-    ctx.restore();
+    // Main pass
+    target.lineWidth = stroke.lineWidth;
+    target.strokeStyle = `rgba(${c.r},${c.g},${c.b},${stroke.alpha})`;
+    target.stroke();
+
+    target.restore();
   }
 
-  // Mouse interaction — subtle watercolor ripple
-  let mouseStrokes = [];
-
-  function addMouseRipple(x, y) {
-    const color = palette[Math.floor(Math.random() * palette.length)];
-    mouseStrokes.push({
-      x, y,
-      radius: 0,
-      maxRadius: 40 + Math.random() * 60,
-      opacity: 0.12,
-      color
-    });
-    if (mouseStrokes.length > 8) mouseStrokes.shift();
+  function bakeStroke(stroke) {
+    drawStrokeTo(offCtx, stroke, 1);
+    stroke.baked = true;
+    bakedStrokeCount++;
   }
 
-  function drawMouseRipples() {
-    mouseStrokes.forEach((ripple, i) => {
-      ripple.radius += (ripple.maxRadius - ripple.radius) * 0.06;
-      ripple.opacity *= 0.97;
+  function drawTrail() {
+    for (let i = trail.length - 1; i >= 0; i--) {
+      const p = trail[i];
+      p.life -= 0.012;
+      p.radius += (p.maxRadius - p.radius) * 0.08;
 
-      if (ripple.opacity < 0.005) {
-        mouseStrokes.splice(i, 1);
-        return;
+      if (p.life <= 0) {
+        trail.splice(i, 1);
+        continue;
       }
 
       ctx.save();
       ctx.globalCompositeOperation = 'multiply';
-      ctx.globalAlpha = ripple.opacity;
-      const grad = ctx.createRadialGradient(ripple.x, ripple.y, 0, ripple.x, ripple.y, ripple.radius);
-      const c = ripple.color;
-      grad.addColorStop(0, `rgba(${c.r},${c.g},${c.b},0.3)`);
-      grad.addColorStop(0.5, `rgba(${c.r},${c.g},${c.b},0.1)`);
+      ctx.globalAlpha = p.life * 0.15;
+      const c = p.color;
+      const grad = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.radius);
+      grad.addColorStop(0, `rgba(${c.r},${c.g},${c.b},0.4)`);
+      grad.addColorStop(0.6, `rgba(${c.r},${c.g},${c.b},0.1)`);
       grad.addColorStop(1, `rgba(${c.r},${c.g},${c.b},0)`);
       ctx.fillStyle = grad;
       ctx.beginPath();
-      ctx.arc(ripple.x, ripple.y, ripple.radius, 0, Math.PI * 2);
+      ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
       ctx.fill();
       ctx.restore();
-    });
+    }
   }
 
   function render() {
-    scrollY = window.scrollY;
-    const pageH = document.documentElement.scrollHeight - window.innerHeight;
-    const scrollProgress = pageH > 0 ? scrollY / pageH : 0;
+    // Smooth scroll interpolation (kills jitter)
+    currentScrollY = window.scrollY;
+    smoothScrollY += (currentScrollY - smoothScrollY) * 0.12;
 
     ctx.clearRect(0, 0, w, h);
 
-    // Update strokes based on scroll
+    // 1) Draw the offscreen baked strokes (zero cost, single drawImage)
+    const parallaxY = smoothScrollY * 0.015;
+    ctx.save();
+    ctx.translate(0, -parallaxY);
+    ctx.drawImage(offscreen, 0, 0, w, h);
+    ctx.restore();
+
+    // 2) Animate & bake newly revealed strokes
+    let needsDraw = false;
     strokes.forEach(stroke => {
-      if (scrollY >= stroke.yTrigger - h * 0.6) {
+      if (stroke.baked) return;
+
+      if (currentScrollY >= stroke.yTrigger - h * 0.7) {
         stroke.targetOpacity = 1;
       }
-      // Smooth fade in
-      stroke.opacity += (stroke.targetOpacity - stroke.opacity) * 0.04;
 
-      // Slight parallax shift based on scroll
-      const parallaxShift = (scrollY * 0.02) * stroke.side;
-      ctx.save();
-      ctx.translate(parallaxShift, 0);
-      drawBrushStroke(stroke);
-      ctx.restore();
+      if (stroke.targetOpacity > 0) {
+        stroke.opacity += (stroke.targetOpacity - stroke.opacity) * 0.05;
+
+        if (stroke.opacity > 0.95) {
+          // Fully revealed → bake to offscreen and stop per-frame rendering
+          stroke.opacity = 1;
+          bakeStroke(stroke);
+        } else {
+          // Still fading in → draw on main canvas
+          const px = smoothScrollY * stroke.parallax;
+          ctx.save();
+          ctx.translate(px, -parallaxY);
+          drawStrokeTo(ctx, stroke, stroke.opacity);
+          ctx.restore();
+          needsDraw = true;
+        }
+      }
     });
 
-    // Mouse ripples
-    drawMouseRipples();
+    // 3) Mouse trail
+    if (trail.length > 0) {
+      drawTrail();
+      needsDraw = true;
+    }
 
-    animFrame = requestAnimationFrame(render);
+    requestAnimationFrame(render);
   }
 
-  // Mouse move for ripples (throttled)
-  let lastRippleTime = 0;
+  // Mouse interaction
   document.addEventListener('mousemove', (e) => {
     mouseX = e.clientX;
     mouseY = e.clientY;
     const now = Date.now();
-    if (now - lastRippleTime > 120) {
-      addMouseRipple(mouseX, mouseY);
-      lastRippleTime = now;
+    if (now - lastTrailTime > 60) {
+      trail.push({
+        x: mouseX,
+        y: mouseY,
+        radius: 2,
+        maxRadius: 25 + Math.random() * 40,
+        life: 1,
+        color: palette[Math.floor(Math.random() * palette.length)]
+      });
+      if (trail.length > MAX_TRAIL) trail.shift();
+      lastTrailTime = now;
     }
   });
 
@@ -197,9 +244,13 @@
   generateStrokes();
   render();
 
+  let resizeTimer;
   window.addEventListener('resize', () => {
-    resize();
-    generateStrokes();
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(() => {
+      resize();
+      generateStrokes();
+    }, 200);
   });
 })();
 
@@ -644,11 +695,99 @@ if (heroBadge) {
   setTimeout(() => scrambleText(heroBadge, originalText), 1800);
 }
 
-// ===== PARALLAX on hero gradient =====
-window.addEventListener('scroll', () => {
-  const hero = document.querySelector('.hero-gradient');
-  if (hero) {
+// ===== SMOOTH PARALLAX ENGINE =====
+(function initParallax() {
+  let ticking = false;
+  let smoothScroll = 0;
+  const heroGradient = document.querySelector('.hero-gradient');
+  const heroContent = document.querySelector('.hero-content');
+  const heroScroll = document.querySelector('.hero-scroll');
+  const aboutBgText = document.querySelector('.about-bg-text');
+  const sections = document.querySelectorAll('section');
+
+  function updateParallax() {
     const scrollY = window.scrollY;
-    hero.style.transform = `translateY(${scrollY * 0.3}px)`;
+    smoothScroll += (scrollY - smoothScroll) * 0.1;
+    const vh = window.innerHeight;
+
+    // Hero parallax — content fades and floats up
+    if (heroGradient) {
+      heroGradient.style.transform = `translateY(${smoothScroll * 0.25}px)`;
+    }
+    if (heroContent) {
+      const heroProgress = Math.min(smoothScroll / vh, 1);
+      heroContent.style.transform = `translateY(${smoothScroll * 0.15}px)`;
+      heroContent.style.opacity = 1 - heroProgress * 1.2;
+    }
+    if (heroScroll) {
+      heroScroll.style.opacity = 1 - Math.min(smoothScroll / (vh * 0.3), 1);
+    }
+
+    // About background text parallax
+    if (aboutBgText) {
+      const rect = aboutBgText.closest('section').getBoundingClientRect();
+      const progress = -rect.top / vh;
+      aboutBgText.style.transform = `translate(-50%, -50%) translateX(${progress * 60}px)`;
+    }
+
+    // Section scale-in effect
+    sections.forEach(section => {
+      const rect = section.getBoundingClientRect();
+      const visible = rect.top < vh && rect.bottom > 0;
+      if (visible) {
+        const entry = Math.max(0, 1 - rect.top / vh);
+        const scale = 0.97 + Math.min(entry, 1) * 0.03;
+        section.style.transform = `scale(${scale})`;
+        section.style.transformOrigin = 'center top';
+      }
+    });
+
+    requestAnimationFrame(updateParallax);
   }
-});
+
+  updateParallax();
+})();
+
+// ===== HERO TEXT STAGGER ANIMATION =====
+(function initHeroAnimation() {
+  const lines = document.querySelectorAll('.hero-title-line');
+  const subtitle = document.querySelector('.hero-subtitle');
+  const actions = document.querySelector('.hero-actions');
+  const badge = document.querySelector('.hero-badge');
+
+  // Wait for loader to finish
+  setTimeout(() => {
+    if (badge) {
+      badge.style.transition = 'opacity 0.8s, transform 0.8s';
+      badge.style.opacity = '1';
+      badge.style.transform = 'translateY(0)';
+    }
+    lines.forEach((line, i) => {
+      setTimeout(() => {
+        line.classList.add('hero-line-visible');
+      }, 200 + i * 200);
+    });
+    if (subtitle) {
+      setTimeout(() => subtitle.classList.add('hero-fade-in'), 700);
+    }
+    if (actions) {
+      setTimeout(() => actions.classList.add('hero-fade-in'), 900);
+    }
+  }, 1600);
+})();
+
+// ===== SMOOTH NUMBER TICKER (for stats on re-count) =====
+function smoothTick(el, from, to, duration) {
+  const start = performance.now();
+  const formatter = new Intl.NumberFormat('fr-FR');
+
+  function update(now) {
+    const elapsed = now - start;
+    const progress = Math.min(elapsed / duration, 1);
+    const ease = 1 - Math.pow(1 - progress, 4);
+    const current = Math.round(from + (to - from) * ease);
+    el.textContent = formatter.format(current);
+    if (progress < 1) requestAnimationFrame(update);
+  }
+  requestAnimationFrame(update);
+}
